@@ -1362,7 +1362,15 @@ class VideoCutter(QWidget):
                 self.videoService.smartinit(clips)
                 self.smartcutter(file, source_file, source_ext)
                 return
+            if len(source_file) > 100:
+                sf = source_file[0:100]
+                videoWithForcedKeyframes = f'{sf}-forced{source_ext}'
+            else:
             videoWithForcedKeyframes = f'{source_file}-forced{source_ext}'
+            if self.ForcedKeyframesLocation == 'source':
+                videoWithForcedKeyframes = os.path.join(source_path, os.path.basename(videoWithForcedKeyframes))
+            else:
+                videoWithForcedKeyframes = os.path.join(self.workFolder, os.path.basename(videoWithForcedKeyframes))
             self.videoService.forceKeyframes(
                 source='{0}{1}'.format(source_file, source_ext),
                 clipTimes=self.clipTimes,

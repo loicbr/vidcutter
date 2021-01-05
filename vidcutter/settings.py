@@ -370,6 +370,44 @@ class VideoPage(QWidget):
         self.parent.settings.setValue('videoZoom', level)
 
 
+class TempPage(QWidget):
+    def __init__(self, parent=None):
+        super(TempPage, self).__init__(parent)
+        self.parent = parent
+        self.setObjectName('settingstemppage')
+        mainLayout = QVBoxLayout()
+        mainLayout.setSpacing(15)
+        index_tempRadio = QRadioButton('/tmp')
+        index_tempRadio.setToolTip('Write in /tmp')
+        index_tempRadio.setCursor(Qt.PointingHandCursor)
+        index_tempRadio.setChecked(self.parent.parent.ForcedKeyframesLocation == 'tmp')
+        index_sourceRadio = QRadioButton('Source File')
+        index_sourceRadio.setToolTip('Write in the same folder as source file')
+        index_sourceRadio.setCursor(Qt.PointingHandCursor)
+        index_sourceRadio.setChecked(self.parent.parent.ForcedKeyframesLocation == 'source')
+        index_buttonGroup = QButtonGroup(self)
+        index_buttonGroup.addButton(index_tempRadio, 1)
+        index_buttonGroup.addButton(index_sourceRadio, 2)
+        # noinspection PyUnresolvedReferences
+        index_buttonGroup.buttonClicked[int].connect(self.setForcedKeyframesLocation)
+        indexLayout = QHBoxLayout()
+        indexLayout.addWidget(index_tempRadio)
+        indexLayout.addWidget(index_sourceRadio)
+        layoutGroup = QGroupBox('ForcedKeyframes files')
+        layoutGroup.setLayout(indexLayout)
+        mainLayout.addWidget(layoutGroup)
+        mainLayout.addStretch(1)
+        self.setLayout(mainLayout)
+    @pyqtSlot(int)
+    def setForcedKeyframesLocation(self, button_id: int) -> None:
+        if button_id == 1:
+            ForcedKeyframesLocation = 'tmp'
+        else:
+            ForcedKeyframesLocation = 'source'
+        self.parent.settings.setValue('ForcedKeyframesLocation', ForcedKeyframesLocation)
+        self.parent.parent.ForcedKeyframesLocation = ForcedKeyframesLocation
+
+
 class ToolsPage(QWidget):
     def __init__(self, parent=None):
         super(ToolsPage, self).__init__(parent)
@@ -666,6 +704,7 @@ class SettingsDialog(QDialog):
         self.categories.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.pages = QStackedWidget(self)
         self.pages.addWidget(GeneralPage(self))
+        self.pages.addWidget(TempPage(self))
         self.pages.addWidget(VideoPage(self))
         self.pages.addWidget(ThemePage(self))
         self.pages.addWidget(ToolsPage(self))
@@ -689,6 +728,12 @@ class SettingsDialog(QDialog):
         generalButton.setToolTip('General settings')
         generalButton.setTextAlignment(Qt.AlignHCenter)
         generalButton.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+        tempButton = QListWidgetItem(self.categories)
+        tempButton.setIcon(QIcon(':/images/settings-general.png'))
+        tempButton.setText('Temp. files')
+        tempButton.setToolTip('Temporary files settings')
+        tempButton.setTextAlignment(Qt.AlignHCenter)
+        tempButton.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
         videoButton = QListWidgetItem(self.categories)
         videoButton.setIcon(QIcon(':/images/settings-video.png'))
         videoButton.setText('Video')
