@@ -155,9 +155,10 @@ class VideoService(QObject):
         available = info.bytesAvailable() / 1000 / 1000
         if available < VideoService.spaceWarningThreshold:
             warnmsg = 'There is less than {}MB of free disk space in the '.format(VideoService.spaceWarningThreshold)
-            warnmsg += 'folder selected to save your media. '
+            warnmsg += 'folder selected to save your media ({}). '.format(path)
             warnmsg += 'VidCutter will fail if space runs out before processing completes.'
-            spacewarn = VCMessageBox('Warning', 'Disk space alert', warnmsg, self.parentWidget())
+            self.logger.info(warnmsg)
+            spacewarn = VCMessageBox('Warning', 'Disk space alert', warnmsg, parent=self.parent.parent)
             spacewarn.addButton(VCMessageBox.Ok)
             spacewarn.exec_()
             self.spaceWarningDelivered = True
@@ -773,21 +774,21 @@ class VideoService(QObject):
                 if ext.lower() == '.ts':
                     outfiles.append(file)
                 else:
-                outfile = '{}-transcoded.ts'.format(name)
-                outfiles.append(outfile)
-                if os.path.isfile(outfile):
-                    os.remove(outfile)
-                args = [
+                    outfile = '{}-transcoded.ts'.format(name)
+                    outfiles.append(outfile)
+                    if os.path.isfile(outfile):
+                        os.remove(outfile)
+                    args = [
                         '-v', 'info',
-                    '-i', file,
-                    '-c', 'copy',
+                        '-i', file,
+                        '-c', 'copy',
                         '-map', '0'
                     ] + video_bsf.split() + [
-                    '-f', 'mpegts',
-                    outfile,
-                ]
-                if not self.cmdExec(self.backends.ffmpeg, args):
-                    return result
+                        '-f', 'mpegts',
+                        outfile,
+                    ]
+                    if not self.cmdExec(self.backends.ffmpeg, args):
+                        return result
             # 2. losslessly concatenate at the file level
             if len(outfiles):
                 if os.path.isfile(output):
