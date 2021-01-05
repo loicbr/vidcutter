@@ -1,0 +1,1 @@
+/home/loic/.virtualenvs/vidcutter-38/lib/python3.8/site-packages/vidcutter-6.0.0-py3.8-linux-x86_64.egg/vidcutter/libs/mpv.py
