@@ -1406,6 +1406,7 @@ class VideoCutter(QWidget):
                                              .format(vidcutter.__bugreport__))
                         return
             self.joinMedia(filelist)
+            os.remove(videoWithForcedKeyframes)
 
     def smartcutter(self, file: str, source_file: str, source_ext: str) -> None:
         self.smartcut_monitor = Munch(clips=[], results=[], externals=0)
