@@ -777,11 +777,11 @@ class VideoService(QObject):
                 if os.path.isfile(outfile):
                     os.remove(outfile)
                 args = [
-                    '-v', 'error',
+                        '-v', 'info',
                     '-i', file,
                     '-c', 'copy',
-                    '-map', '0',
-                    video_bsf,
+                        '-map', '0'
+                    ] + video_bsf.split() + [
                     '-f', 'mpegts',
                     outfile,
                 ]
