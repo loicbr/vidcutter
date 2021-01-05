@@ -768,7 +768,10 @@ class VideoService(QObject):
             video_bsf, audio_bsf = self.getBSF(inputs[0])
             # 1. transcode to mpeg transport streams
             for file in inputs:
-                name, _ = os.path.splitext(file)
+                name, ext = os.path.splitext(file)
+                if ext.lower() == '.ts':
+                    outfiles.append(file)
+                else:
                 outfile = '{}-transcoded.ts'.format(name)
                 outfiles.append(outfile)
                 if os.path.isfile(outfile):
