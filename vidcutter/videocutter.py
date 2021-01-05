@@ -117,6 +117,7 @@ class VideoCutter(QWidget):
         self.level2Seek = self.settings.value('level2Seek', 5, type=float)
         self.verboseLogs = self.parent.verboseLogs
         self.lastFolder = self.settings.value('lastFolder', QDir.homePath(), type=str)
+        self.lastOutputFolder = self.settings.value('lastOutputFolder', QDir.homePath(), type=str)
 
         self.videoService = VideoService(self.settings, self)
         self.videoService.progress.connect(self.seekSlider.updateProgress)
@@ -1333,9 +1334,11 @@ class VideoCutter(QWidget):
 
     def saveMedia(self) -> None:
         clips = len(self.clipTimes)
-        source_file, source_ext = os.path.splitext(self.currentMedia if self.currentMedia is not None
+        source_path, source_file = os.path.split(self.currentMedia if self.currentMedia is not None
                                                    else self.clipTimes[0][3])
-        suggestedFilename = '{0}_EDIT{1}'.format(source_file, source_ext)
+        source_file1, source_ext = os.path.splitext(source_file)
+        suggestedFilename = '{0}/{1}_EDIT{2}'.format(self.lastOutputFolder,source_file1, source_ext)
+        source_file = '{}/{}'.format(source_path, source_file1)
         filefilter = 'Video files (*{0})'.format(source_ext)
         if clips > 0:
             self.finalFilename, _ = QFileDialog.getSaveFileName(
@@ -1349,7 +1352,7 @@ class VideoCutter(QWidget):
             file, ext = os.path.splitext(self.finalFilename)
             if len(ext) == 0 and len(source_ext):
                 self.finalFilename += source_ext
-            self.lastFolder = QFileInfo(self.finalFilename).absolutePath()
+            self.lastOutputFolder = QFileInfo(self.finalFilename).absolutePath()
             self.toolbar_save.setDisabled(True)
             if not os.path.isdir(self.workFolder):
                 os.mkdir(self.workFolder)

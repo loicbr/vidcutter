@@ -216,6 +216,7 @@ class MainWindow(QMainWindow):
 
     def save_settings(self) -> None:
         self.settings.setValue('lastFolder', self.cutter.lastFolder)
+        self.settings.setValue('lastOutputFolder', self.cutter.lastOutputFolder)
         self.settings.setValue('geometry', self.saveGeometry())
         self.settings.setValue('windowState', self.saveState())
         self.settings.sync()
