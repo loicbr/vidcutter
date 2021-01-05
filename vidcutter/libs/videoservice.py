@@ -196,6 +196,7 @@ class VideoService(QObject):
 
     # noinspection PyBroadException
     def testJoin(self, file1: str, file2: str) -> bool:
+        self.logger.info('In testJoin')
         result = False
         self.logger.info('attempting to test joining of "{0}" & "{1}"'.format(file1, file2))
         try:
@@ -299,6 +300,7 @@ class VideoService(QObject):
         return output
 
     def finalize(self, source: str) -> bool:
+        self.logger.info('In finalize')
         self.checkDiskSpace(source)
         source_file, source_ext = os.path.splitext(source)
         final_filename = '{0}_FINAL{1}'.format(source_file, source_ext)
@@ -317,6 +319,7 @@ class VideoService(QObject):
 
     def cut(self, source: str, output: str, frametime: str, duration: str, allstreams: bool=True, vcodec: str=None,
             run: bool=True) -> Union[bool, List[str]]:
+        self.logger.info('In cut')
         self.checkDiskSpace(output)
         stream_map = self.parseMappings(allstreams)
         if vcodec is not None:
@@ -435,6 +438,7 @@ class VideoService(QObject):
             self.smartcut_jobs[index].results.update(end=False)
 
     def forceKeyframes(self, source: str, clipTimes:[], fps: float, output: str) -> None:
+        self.logger.info('In forceKeyframes')
         # stream_map = self.parseMappings(true)
         #eq(n,45)+eq(n,99)+eq(n,154)'
         # forcedKeyframes = toFrames(clipTimes)
@@ -531,6 +535,7 @@ class VideoService(QObject):
             pass
 
     def join(self, inputs: List[str], output: str, allstreams: bool=True, chapters: Optional[List[str]]=None) -> bool:
+        self.logger.info('In Join')
         self.checkDiskSpace(output)
         filelist = os.path.normpath(os.path.join(os.path.dirname(inputs[0]), '_vidcutter.list'))
         with open(filelist, 'w') as f:
