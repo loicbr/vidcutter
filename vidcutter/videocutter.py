@@ -118,6 +118,7 @@ class VideoCutter(QWidget):
         self.verboseLogs = self.parent.verboseLogs
         self.lastFolder = self.settings.value('lastFolder', QDir.homePath(), type=str)
         self.lastOutputFolder = self.settings.value('lastOutputFolder', QDir.homePath(), type=str)
+        self.ForcedKeyframesLocation = self.settings.value('ForcedKeyframesLocation', 'tmp', type=str)
 
         self.videoService = VideoService(self.settings, self)
         self.videoService.progress.connect(self.seekSlider.updateProgress)
