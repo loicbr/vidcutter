@@ -463,7 +463,8 @@ class VideoService(QObject):
         # print(args)
         if os.path.isfile(output):
                 os.remove(output)
-        if not self.cmdExec(self.backends.ffmpeg, args):
+        result = self.cmdExec(self.backends.ffmpeg, args, True)
+        if not result:
             return result
 
     @pyqtSlot(int, QProcess.ExitStatus)
