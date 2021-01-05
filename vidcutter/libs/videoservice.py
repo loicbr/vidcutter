@@ -807,7 +807,7 @@ class VideoService(QObject):
                 ]
                 result = self.cmdExec(self.backends.ffmpeg, args)
                 # 3. cleanup mpegts files
-                [os.remove(file) for file in outfiles]
+                # [os.remove(file) for file in outfiles]
                 if chapters and ffmetadata is not None:
                     os.remove(ffmetadata)
         except BaseException:
