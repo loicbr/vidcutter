@@ -1367,7 +1367,7 @@ class VideoCutter(QWidget):
                 sf = source_file[0:100]
                 videoWithForcedKeyframes = f'{sf}-forced{source_ext}'
             else:
-            videoWithForcedKeyframes = f'{source_file}-forced{source_ext}'
+                videoWithForcedKeyframes = f'{source_file}-forced{source_ext}'
             if self.ForcedKeyframesLocation == 'source':
                 videoWithForcedKeyframes = os.path.join(source_path, os.path.basename(videoWithForcedKeyframes))
             else:
